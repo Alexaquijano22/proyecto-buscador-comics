@@ -1,0 +1,58 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #151515;
+  color: #FEFEFE;
+  padding: 3.5em 1em;
+  text-align: center;
+  transition: all 0.3s;
+  gap: 10px;
+  width: 100%; }
+
+.footer__redes {
+  margin: 0em 0.5em;
+  gap: 10px;
+  font-size: calc(1.5vw + 0.5em); }
+  @media (max-width: 600px) {
+    .footer__redes {
+      font-size: calc(1.5vw + 1em); } }
+
+.footer__icons {
+  color: white;
+  transition: all 0.3s; }
+  .footer__icons:hover {
+    transition: all 0.3s;
+    color: #dd9782; }
+
+.header {
+  width: 100%; }
+  .header :hover .header__content {
+    background-color: #00000050; }
+  .header__content {
+    display: flex;
+    justify-content: center;
+    background-color: #00000080;
+    transition: all 0.3s; }
+  .header__content:hover {
+    transition: all 0.3s;
+    background-color: #00000050; }
+  .header__title {
+    background-color: #EC1D24;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 1px; }
+  .header__img {
+    background-image: url("https://estaticos.muyinteresante.es/media/cache/1140x_thumb/uploads/images/gallery/5beaba975bafe86f2c2b41c4/marvel-heroes_0.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 400px;
+    transition: all 0.3s; }
+
+.main {
+  max-width: 1300px;
+  width: 100%;
+  margin: 2.5em 0em 5em 0em; }
+  @media (max-width: 425px) {
+    .main {
+      padding: 0em 1em; } }

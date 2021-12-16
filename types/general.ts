@@ -15,10 +15,12 @@ const comicList = document.getElementById("comicList")
 const linkButton = document.getElementById("link")
 const firstPageBtn = document.getElementById("firstPageBtn")
 const lastPageBtn = document.getElementById("lastPageBtn")
-const search = <HTMLInputElement>document.getElementById("search");
+const search = <HTMLInputElement>document.getElementById("search")
 const type = <HTMLInputElement>document.getElementById("type")
 const orderBy = <HTMLInputElement>document.getElementById("orderBy")
 const filterBtn = document.getElementById("filterBtn")
+const loadingData = document.getElementById("loading-data")
+const containerData = document.getElementById("container-data")
 
 
 let limit = 20
@@ -73,22 +75,34 @@ const consultParams = () => {
 
 
 const createTable = (comics) => {
-	comicList.innerHTML = ""
-	document.body.appendChild(comicList)
-	comics.forEach((item, i) => {
-		const Items = document.createElement("li")
+	containerData.innerHTML = ""
+	comics.forEach((item) => {
+		const items = document.createElement("div")
+		const itemsElementText = document.createElement("p")
+		const divImg = document.createElement("div")
+		divImg.classList.add("card__contImg")
+		items.classList.add("card")
 		const itemsText = document.createTextNode(item.title)
 		const itemsImg = document.createElement("img")
-		itemsImg.setAttribute("width", "100px")
-		const itemsDiv = document.createElement("div")
+		itemsImg.classList.add("img")
+		itemsElementText.classList.add("card__text")
 		itemsImg.src = `${item.thumbnail.path}.${item.thumbnail.extension}`
-		itemsDiv.appendChild(itemsText)
-		itemsDiv.appendChild(itemsImg)
-		itemsDiv.addEventListener('click', () => {
-			fetchComic(item.id)
-		})
-		Items.appendChild(itemsDiv)
-		comicList.appendChild(Items)
+		divImg.appendChild(itemsImg)
+		items.appendChild(divImg)
+		itemsElementText.appendChild(itemsText);
+		items.appendChild(itemsElementText)
+		containerData.appendChild(items)
+
+		// const itemsDiv = document.createElement("div")
+		// itemsDiv.classList.add("flex-column", "card")
+		// itemsDiv.appendChild(itemsImg)
+		// itemsDiv.appendChild(itemsText)
+		// itemsDiv.addEventListener('click', () => {
+		// 	fetchComic(item.id)
+		// })
+		// Items.appendChild(itemsDiv)
+		// comicList.appendChild(Items)
+		// containerItems.appendChild(comicList)
 	})
 
 }
@@ -180,17 +194,17 @@ const generateUrlApi = (paramsObj) => {
 
 const queryParamsToApi = () => {
 	let paramsOfApi = ""
-	if(params.get("orderBy")){
+	if (params.get("orderBy")) {
 		const param = {
 			titleStartsWith: params.get("title"),
 			orderBy: defaultOrder(params.get("type"), params.get("orderBy"))
 		}
 		for (const key of Object.keys(param)) {
-			if(param[key]){
+			if (param[key]) {
 				paramsOfApi = `${paramsOfApi}${key === "title" ? "titleStartsWith" : key}=${param[key]}&`
 			}
 		}
-	}else{
+	} else {
 		paramsOfApi = `orderBy=title`
 	}
 	return paramsOfApi
@@ -201,17 +215,29 @@ const fetchData = () => {
 	const queryParams = queryParamsToApi()
 	const type = params.get("type") ? params.get("type") : "comics"
 	const calcOffset = offset - limit === -limit ? 0 : offset - limit
+	createLoader(true);
 	return fetch(`${baseUrl}${type}?ts=1&apikey=${apiKey}&hash=${hash}&offset=${calcOffset}&${queryParams}`)
 		.then((response) => {
 			return response.json()
 		})
 		.then((rta) => {
+			createLoader(false);
 			const comics = rta.data.results
 			limit = rta.data.limit
 			total = rta.data.total
 			createTable(comics)
 
 		})
+}
+
+const createLoader = (toCreate: boolean) => {
+	if (toCreate) {
+		const item = document.createElement("div");
+		item.innerHTML = `<div class="loader"></div> <label>Cargando...</label>`;
+		loadingData.appendChild(item)
+	} else {
+		loadingData.innerHTML = "";
+	}
 }
 
 const init = async () => {
@@ -238,8 +264,8 @@ nextButton.addEventListener('click', nextPage)
 firstPageBtn.addEventListener('click', firstPage)
 lastPageBtn.addEventListener('click', lastPage)
 filterBtn.addEventListener('click', filter)
-type.addEventListener('change', (e) => {
-	createOptions(e.target.value)
+type.addEventListener('change', () => {
+	createOptions(type.value)
 })
 
 

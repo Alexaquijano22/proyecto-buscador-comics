@@ -1,0 +1,9 @@
+.pagination{
+    justify-content: center;
+    border-radius: 5px;
+    margin: 1.6em 0em 2em 0em;
+    gap: 8px;
+    @media (max-width:500px){
+        flex-direction: column;
+    }
+}

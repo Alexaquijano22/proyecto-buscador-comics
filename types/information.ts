@@ -11,6 +11,8 @@ const fetchComic = (comicId) => {
 		const data = rta.data.results[0]
 		console.log(data);
 		createComic(data)
+	}).catch(() => {
+		console.log("Error consumiendo el servicio, intentelo de nuevo");
 	})
 }
 

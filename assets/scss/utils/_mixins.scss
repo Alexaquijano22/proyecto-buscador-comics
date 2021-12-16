@@ -1,0 +1,15 @@
+// @mixin buttons($color, $bgColor){
+//     background-color: $bgColor;
+//     color: $color;
+//     border-radius: 5px;
+//     cursor: pointer;
+//     &:hoven{
+//         background-color: darken($bgColor, 5%);
+//         transition: all 0.5s ease;
+//     }
+//     &:active{
+//         background-color: darken($bgColor, 15%);
+//         transition: all 0.5s ease;
+//     }
+
+// }
