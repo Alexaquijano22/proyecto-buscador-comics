@@ -1,0 +1,28 @@
+.btn{
+    padding: 5px 7px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    -webkit-box-shadow: 5px 5px 10px 5px #00000050;
+    box-shadow: 4px 3px 8px -3px #00000050;
+    font-size: calc(0.1vw + 0.95em);
+    font-weight: 500;
+    &.btn-primary{
+        background-color: #EC1D24;
+        color: white;
+        &:disabled{
+            background-color: #EC1D2490;
+        }
+    }
+    &.btn-secundary{
+        background-color: #846f72;
+        color: white;
+        &:disabled{
+            background-color: #846f7290;
+        }
+    }
+    &:disabled{
+        cursor: default;
+    }
+
+}

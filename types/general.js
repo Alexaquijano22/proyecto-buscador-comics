@@ -52,6 +52,8 @@ var search = document.getElementById("search");
 var type = document.getElementById("type");
 var orderBy = document.getElementById("orderBy");
 var filterBtn = document.getElementById("filterBtn");
+var loadingData = document.getElementById("loading-data");
+var containerData = document.getElementById("container-data");
 var limit = 20;
 var total = 0;
 var offset = page * limit;
@@ -97,22 +99,33 @@ var consultParams = function () {
     }
 };
 var createTable = function (comics) {
-    comicList.innerHTML = "";
-    document.body.appendChild(comicList);
-    comics.forEach(function (item, i) {
-        var Items = document.createElement("li");
+    containerData.innerHTML = "";
+    comics.forEach(function (item) {
+        var items = document.createElement("div");
+        var itemsElementText = document.createElement("p");
+        var divImg = document.createElement("div");
+        divImg.classList.add("card__contImg");
+        items.classList.add("card");
         var itemsText = document.createTextNode(item.title);
         var itemsImg = document.createElement("img");
-        itemsImg.setAttribute("width", "100px");
-        var itemsDiv = document.createElement("div");
+        itemsImg.classList.add("img");
+        itemsElementText.classList.add("card__text");
         itemsImg.src = item.thumbnail.path + "." + item.thumbnail.extension;
-        itemsDiv.appendChild(itemsText);
-        itemsDiv.appendChild(itemsImg);
-        itemsDiv.addEventListener('click', function () {
-            fetchComic(item.id);
-        });
-        Items.appendChild(itemsDiv);
-        comicList.appendChild(Items);
+        divImg.appendChild(itemsImg);
+        items.appendChild(divImg);
+        itemsElementText.appendChild(itemsText);
+        items.appendChild(itemsElementText);
+        containerData.appendChild(items);
+        // const itemsDiv = document.createElement("div")
+        // itemsDiv.classList.add("flex-column", "card")
+        // itemsDiv.appendChild(itemsImg)
+        // itemsDiv.appendChild(itemsText)
+        // itemsDiv.addEventListener('click', () => {
+        // 	fetchComic(item.id)
+        // })
+        // Items.appendChild(itemsDiv)
+        // comicList.appendChild(Items)
+        // containerItems.appendChild(comicList)
     });
 };
 var nextPage = function () {
@@ -221,16 +234,28 @@ var fetchData = function () {
     var queryParams = queryParamsToApi();
     var type = params.get("type") ? params.get("type") : "comics";
     var calcOffset = offset - limit === -limit ? 0 : offset - limit;
+    createLoader(true);
     return fetch("" + baseUrl + type + "?ts=1&apikey=" + apiKey + "&hash=" + hash + "&offset=" + calcOffset + "&" + queryParams)
         .then(function (response) {
         return response.json();
     })
         .then(function (rta) {
+        createLoader(false);
         var comics = rta.data.results;
         limit = rta.data.limit;
         total = rta.data.total;
         createTable(comics);
     });
+};
+var createLoader = function (toCreate) {
+    if (toCreate) {
+        var item = document.createElement("div");
+        item.innerHTML = "<div class=\"loader\"></div> <label>Cargando...</label>";
+        loadingData.appendChild(item);
+    }
+    else {
+        loadingData.innerHTML = "";
+    }
 };
 var init = function () { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
@@ -260,7 +285,7 @@ nextButton.addEventListener('click', nextPage);
 firstPageBtn.addEventListener('click', firstPage);
 lastPageBtn.addEventListener('click', lastPage);
 filterBtn.addEventListener('click', filter);
-type.addEventListener('change', function (e) {
-    createOptions(e.target.value);
+type.addEventListener('change', function () {
+    createOptions(type.value);
 });
 init();

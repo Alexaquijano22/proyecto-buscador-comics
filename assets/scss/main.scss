@@ -1,4 +1,8 @@
-nav{
-    color: white;
-    background-color: aqua;
-}
+//Recordar el orden importa
+@import "./utils/main.scss";
+@import "./vendors/main.scss";
+@import "./base/main.scss";
+@import "./layout/main.scss";
+@import "./components/main.scss";
+@import "./page/main.scss";
+@import "./theme/main.scss";

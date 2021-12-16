@@ -1,29 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="./css/scripts.css">
-    <title>Document</title>
-</head>
-<body>
-    <button id="firstPageBtn" type="button">First page</button>
-    <button id="BackButton" type="button">Back Page</button>
-    <button id="NextButton" type="button"> Next Page</button>
-    <button id="lastPageBtn" type="">Last page</button>
-    <input type="text" id="search">
-    <select name="" id="type">
-        <option value="comics">Comics</option>
-        <option value="characters">Personajes</option>
-    </select>
-    <select name="" id="orderBy"></select>
-    <button id="filterBtn">Buscar</button>
-    <ul id="comicList">
 
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="./assets/css/main.css" />
+  <title>Marvel Comics</title>
+  <script src="https://kit.fontawesome.com/acf3513723.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <header class="header">
+    <div class="header__img">
+      <div class="header__content">
+        <h1 class="header__title">ADA COMICS</h1>
+      </div>
+    </div>
+  </header>
+  <main class="main">
+    <section class="flex-column">
+      <div class="content-search-pagination">
+        <div class="searcher">
+          <div style="width:100%">
+            <label class="label-inputs" for="search">Busqueda</label>
+            <input type="text" id="search" class="input-search" placeholder="Buscar..."/>
+          </div>
+          <div class="searcher__selects">
+            <div class="flex-column">
+              <label class="label-inputs" for="type">Tipo</label>
+              <select class="select" id="type">
+                <option value="comics">Comics</option>
+                <option value="characters">Personajes</option>
+              </select>
+            </div>
+            <div class="flex-column">
+              <label class="label-inputs" for="orderBy">Ordenar por</label>
+              <select class="select" id="orderBy"></select>
+            </div>
+          </div>
+          <div class="searcher__button">
+            <button id="filterBtn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 700;">Buscar</button>
+          </div>
+        </div>
+       
+      </div>
+      <section class="loading-data" id="loading-data"></section>
+      <div class="container-cards" id="container-data"></div>
+      <div class="flex pagination">
+        <button id="firstPageBtn" type="button" class="btn btn-secundary">Primera pagina</button>
+        <button id="BackButton" type="button" class="btn btn-primary">Anterior</button>
+        <button id="NextButton" type="button" class="btn btn-primary">Siguiente</button>
+        <button id="lastPageBtn" type="button" class="btn btn-secundary">Última página</button>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">
+    <h2>Hecho con 💛 por Alexandra Quijano</h2>
+    <ul class="flex">
+      <li class="footer__redes">
+        <a href="https://github.com/Alexaquijano22" target="_blank"><i class="footer__icons fab fa-github-alt"></i></a>
+      </li>
+      <li class="footer__redes">
+        <a href="mailto:alex22quijano@gmail.com"><i class="footer__icons far fa-envelope"></i></a>
+      </li>
+      <li class="footer__redes">
+        <a href="https://www.linkedin.com/in/alexandra-quijano-saavedra-b981a6176/" target="_blank"><i
+            class="footer__icons fab fa-linkedin-in"></i></i></a>
+      </li>
     </ul>
-    <script src="./types/general.js"></script>
-    <script src="./types/comic.js"></script>
-    <script src="./types/types.js"></script>
+    
+  </footer>
+
+  <script src="./types/general.js"></script>
+  <script src="./types/types.js"></script>
+  <script src="./types/information.js"></script>
 </body>
+
 </html>
