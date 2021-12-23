@@ -1,21 +1,11 @@
-.content-search-pagination{
-    margin: 0em 4.3em;
-    @media (max-width:700px){
-        margin: 0em 2em;
-    }
-    @media (max-width:425px){
-        margin: 0;
-    }
-}
-
 .searcher{
     padding: 1.2em 2em;
     border-radius: 5px;
     background-color: #222222;
     -webkit-box-shadow: 5px 5px 10px 5px #BDBDBD;
     box-shadow: 5px 5px 10px 5px #BDBDBD;
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 3fr 1fr 100px;
     gap: 10px;
     &__selects{
         display: flex;

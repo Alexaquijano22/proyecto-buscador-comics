@@ -1,0 +1,25 @@
+.img{
+    width: 100%;
+    height: 100%;
+    -webkit-box-shadow: 0 15px 30px 1px #9b9b9b;
+    box-shadow: 0px 14px 21px -4px #9b9b9b;
+    transition: all 0.3s;
+
+    &:hover{
+        transform: translateY(-12px);
+        transition: all 0.3s;
+    }
+}
+
+.img-character{
+    border-radius: 10px 10px 0px 0px;
+    width: 100%;
+    height: 100%;
+    -webkit-box-shadow: 0 15px 30px 1px #9b9b9b;
+    box-shadow: 0px 14px 21px -4px #9b9b9b;
+    transition: all 0.3s;
+    &:hover{
+        transform: scale(1.1);
+        transition: all 0.3s;
+    }
+}

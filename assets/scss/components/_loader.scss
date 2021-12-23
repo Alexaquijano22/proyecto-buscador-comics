@@ -1,3 +1,13 @@
+.loader{
+  &__container{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    height: 200px;
+  }
+}
 
 .loading-data{
     display: flex; 

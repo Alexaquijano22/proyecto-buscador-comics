@@ -36,6 +36,7 @@ h2 {
       font-size: calc(0.5vw + 1em); } }
 
 .label-inputs {
+  margin-left: 3px;
   color: white;
   font-weight: 600; }
 
@@ -45,3 +46,9 @@ h2 {
 .flex-column {
   display: flex;
   flex-direction: column; }
+
+.results {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  margin: 1.5em 0em; }
