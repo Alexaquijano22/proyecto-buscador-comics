@@ -21,6 +21,10 @@ const orderBy = <HTMLInputElement>document.getElementById("orderBy")
 const filterBtn = document.getElementById("filterBtn")
 const loadingData = document.getElementById("loading-data")
 const containerData = document.getElementById("container-data")
+const results = document.getElementById("results")
+const contPagination = document.getElementById("pagination")
+const cardComicOfCharacter = document.getElementById("cardComicOfCharacter")
+
 
 
 let limit = 20
@@ -54,7 +58,7 @@ const createOptions = (type) => {
 		charactersOrderBy.forEach(element => {
 			const characterOption = document.createElement("option")
 			const optionText = document.createTextNode(element)
-			characterOption.appendChild(optionText);
+			characterOption.appendChild(optionText)
 			orderBy.appendChild(characterOption)
 
 		})
@@ -74,36 +78,42 @@ const consultParams = () => {
 }
 
 
-const createTable = (comics) => {
+const createTable = (comicsOrCharacter: Comics[] | Characters[], type: string) => {
 	containerData.innerHTML = ""
-	comics.forEach((item) => {
+	comicsOrCharacter.map((item) => {
 		const items = document.createElement("div")
 		const itemsElementText = document.createElement("p")
 		const divImg = document.createElement("div")
-		divImg.classList.add("card__contImg")
-		items.classList.add("card")
 		const itemsText = document.createTextNode(item.title)
 		const itemsImg = document.createElement("img")
-		itemsImg.classList.add("img")
-		itemsElementText.classList.add("card__text")
+		items.classList.add(type == "comics" ? "card" : "card-characters")
+		divImg.classList.add(type === "comics" ? "card__contImg" : "card-characters__contImg")
+		itemsImg.classList.add(type === "comics" ? "img" : "img-character")
+		itemsElementText.classList.add(type == "comics" ? "card__text" : "card-characters__text")
 		itemsImg.src = `${item.thumbnail.path}.${item.thumbnail.extension}`
 		divImg.appendChild(itemsImg)
 		items.appendChild(divImg)
-		itemsElementText.appendChild(itemsText);
-		items.appendChild(itemsElementText)
+		if(type == "characters"){
+			const divTextCharacter = document.createElement("div")
+			const nodeCharacterText = document.createTextNode(item.name)
+			const contCharacterText = document.createElement("p")
+			divTextCharacter.classList.add("card-characters__text")
+			contCharacterText.appendChild(nodeCharacterText)
+			divTextCharacter.appendChild(contCharacterText)
+			items.appendChild(divTextCharacter)
+		}else{
+			itemsElementText.appendChild(itemsText)
+			items.appendChild(itemsElementText)
+		}
 		containerData.appendChild(items)
-
-		// const itemsDiv = document.createElement("div")
-		// itemsDiv.classList.add("flex-column", "card")
-		// itemsDiv.appendChild(itemsImg)
-		// itemsDiv.appendChild(itemsText)
-		// itemsDiv.addEventListener('click', () => {
-		// 	fetchComic(item.id)
-		// })
-		// Items.appendChild(itemsDiv)
-		// comicList.appendChild(Items)
-		// containerItems.appendChild(comicList)
+		divImg.addEventListener('click', () => {
+			console.log(type);
+			window.location.href = "/index.html?" + `id=${item.id}&type=${type}` 
+		})
 	})
+	results.innerHTML = `<h2 style="font-weight: 600;">Resultados</h2>
+	<p id="results-parag">${total} Resultados</p>`
+	
 
 }
 
@@ -178,6 +188,10 @@ const defaultOrder = (queryType, queryOrder) => {
 
 }
 
+const changeDateFormat = (date: string) => {
+	return date.split("T")[0]
+}
+
 const generateUrlApi = (paramsObj) => {
 	const searchParams: URLSearchParams = new URLSearchParams()
 	let paramsOfApi = ""
@@ -189,6 +203,7 @@ const generateUrlApi = (paramsObj) => {
 	for (const key of Object.keys(paramsObj)) {
 		paramsOfApi = `${paramsOfApi}${key === "title" ? "titleStartsWith" : key}=${paramsObj[key]}&`
 	}
+	console.log(searchParams.toString());
 	return searchParams.toString();
 }
 
@@ -205,34 +220,42 @@ const queryParamsToApi = () => {
 			}
 		}
 	} else {
-		paramsOfApi = `orderBy=title`
+		paramsOfApi = `${params.get("type") == "characters" ? "orderBy=name" : "orderBy=title"}`
 	}
 	return paramsOfApi
 }
 
 
-const fetchData = () => {
+const fetchData = (id: string) => {
 	const queryParams = queryParamsToApi()
 	const type = params.get("type") ? params.get("type") : "comics"
 	const calcOffset = offset - limit === -limit ? 0 : offset - limit
+	const infoId = id ? `/${id}`: ""
 	createLoader(true);
-	return fetch(`${baseUrl}${type}?ts=1&apikey=${apiKey}&hash=${hash}&offset=${calcOffset}&${queryParams}`)
+	return fetch(`${baseUrl}${type}${infoId}?ts=1&apikey=${apiKey}&hash=${hash}&offset=${calcOffset}&${queryParams}`)
 		.then((response) => {
 			return response.json()
 		})
 		.then((rta) => {
 			createLoader(false);
-			const comics = rta.data.results
-			limit = rta.data.limit
-			total = rta.data.total
-			createTable(comics)
-
+			if(infoId){
+				const data = rta.data.results[0]
+				createCardOfType(data, type)
+				contPagination.innerHTML = ""
+			}else{
+				const comics = rta.data.results
+				limit = rta.data.limit
+				total = rta.data.total
+				createTable(comics, type)
+			}
 		})
 }
 
 const createLoader = (toCreate: boolean) => {
 	if (toCreate) {
+		loadingData.innerHTML = "";
 		const item = document.createElement("div");
+		item.classList.add("loader__container")
 		item.innerHTML = `<div class="loader"></div> <label>Cargando...</label>`;
 		loadingData.appendChild(item)
 	} else {
@@ -241,10 +264,14 @@ const createLoader = (toCreate: boolean) => {
 }
 
 const init = async () => {
-	await fetchData()
-	disableBtns()
+	if(params.get("id")){
+		await fetchData(params.get("id"))
+	}else{
+		await fetchData("")
+	}
 	createOptions(type.value)
 	consultParams()
+	disableBtns()
 }
 
 const disableBtns = () => {

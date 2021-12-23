@@ -28,6 +28,7 @@
 .header {
   width: 100%; }
   .header :hover .header__content {
+    cursor: pointer;
     background-color: #00000050; }
   .header__content {
     display: flex;
@@ -50,9 +51,5 @@
     transition: all 0.3s; }
 
 .main {
-  max-width: 1300px;
-  width: 100%;
-  margin: 2.5em 0em 5em 0em; }
-  @media (max-width: 425px) {
-    .main {
-      padding: 0em 1em; } }
+  max-width: 1200px;
+  margin: 2.5em 1em 3em 1em; }

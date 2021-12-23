@@ -13,7 +13,7 @@
 <body>
   <header class="header">
     <div class="header__img">
-      <div class="header__content">
+      <div class="header__content" onclick="window.location.href = './index.html'">
         <h1 class="header__title">ADA COMICS</h1>
       </div>
     </div>
@@ -22,9 +22,9 @@
     <section class="flex-column">
       <div class="content-search-pagination">
         <div class="searcher">
-          <div style="width:100%">
+          <div style="flex-grow: 1;">
             <label class="label-inputs" for="search">Busqueda</label>
-            <input type="text" id="search" class="input-search" placeholder="Buscar..."/>
+            <input maxlength="70" type="text" id="search" class="input-search" placeholder="Buscar..."/>
           </div>
           <div class="searcher__selects">
             <div class="flex-column">
@@ -43,11 +43,12 @@
             <button id="filterBtn" class="btn btn-primary" style="padding: 10px 20px; font-weight: 700;">Buscar</button>
           </div>
         </div>
-       
+        <div class="results" id="results"></div>
       </div>
       <section class="loading-data" id="loading-data"></section>
-      <div class="container-cards" id="container-data"></div>
-      <div class="flex pagination">
+      <div class="container-cards" id="container-data"
+      ></div>
+      <div class="flex pagination" id="pagination">
         <button id="firstPageBtn" type="button" class="btn btn-secundary">Primera pagina</button>
         <button id="BackButton" type="button" class="btn btn-primary">Anterior</button>
         <button id="NextButton" type="button" class="btn btn-primary">Siguiente</button>
@@ -72,9 +73,9 @@
     
   </footer>
 
-  <script src="./types/general.js"></script>
   <script src="./types/types.js"></script>
   <script src="./types/information.js"></script>
+  <script src="./types/general.js"></script>
 </body>
 
 </html>

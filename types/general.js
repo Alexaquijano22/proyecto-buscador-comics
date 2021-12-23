@@ -54,6 +54,9 @@ var orderBy = document.getElementById("orderBy");
 var filterBtn = document.getElementById("filterBtn");
 var loadingData = document.getElementById("loading-data");
 var containerData = document.getElementById("container-data");
+var results = document.getElementById("results");
+var contPagination = document.getElementById("pagination");
+var cardComicOfCharacter = document.getElementById("cardComicOfCharacter");
 var limit = 20;
 var total = 0;
 var offset = page * limit;
@@ -98,35 +101,41 @@ var consultParams = function () {
         type.value = params.get("type");
     }
 };
-var createTable = function (comics) {
+var createTable = function (comicsOrCharacter, type) {
     containerData.innerHTML = "";
-    comics.forEach(function (item) {
+    comicsOrCharacter.map(function (item) {
         var items = document.createElement("div");
         var itemsElementText = document.createElement("p");
         var divImg = document.createElement("div");
-        divImg.classList.add("card__contImg");
-        items.classList.add("card");
         var itemsText = document.createTextNode(item.title);
         var itemsImg = document.createElement("img");
-        itemsImg.classList.add("img");
-        itemsElementText.classList.add("card__text");
+        items.classList.add(type == "comics" ? "card" : "card-characters");
+        divImg.classList.add(type === "comics" ? "card__contImg" : "card-characters__contImg");
+        itemsImg.classList.add(type === "comics" ? "img" : "img-character");
+        itemsElementText.classList.add(type == "comics" ? "card__text" : "card-characters__text");
         itemsImg.src = item.thumbnail.path + "." + item.thumbnail.extension;
         divImg.appendChild(itemsImg);
         items.appendChild(divImg);
-        itemsElementText.appendChild(itemsText);
-        items.appendChild(itemsElementText);
+        if (type == "characters") {
+            var divTextCharacter = document.createElement("div");
+            var nodeCharacterText = document.createTextNode(item.name);
+            var contCharacterText = document.createElement("p");
+            divTextCharacter.classList.add("card-characters__text");
+            contCharacterText.appendChild(nodeCharacterText);
+            divTextCharacter.appendChild(contCharacterText);
+            items.appendChild(divTextCharacter);
+        }
+        else {
+            itemsElementText.appendChild(itemsText);
+            items.appendChild(itemsElementText);
+        }
         containerData.appendChild(items);
-        // const itemsDiv = document.createElement("div")
-        // itemsDiv.classList.add("flex-column", "card")
-        // itemsDiv.appendChild(itemsImg)
-        // itemsDiv.appendChild(itemsText)
-        // itemsDiv.addEventListener('click', () => {
-        // 	fetchComic(item.id)
-        // })
-        // Items.appendChild(itemsDiv)
-        // comicList.appendChild(Items)
-        // containerItems.appendChild(comicList)
+        divImg.addEventListener('click', function () {
+            console.log(type);
+            window.location.href = "/index.html?" + ("id=" + item.id + "&type=" + type);
+        });
     });
+    results.innerHTML = "<h2 style=\"font-weight: 600;\">Resultados</h2>\n\t<p id=\"results-parag\">" + total + " Resultados</p>";
 };
 var nextPage = function () {
     if (!page) {
@@ -197,6 +206,9 @@ var defaultOrder = function (queryType, queryOrder) {
     }
     return orderValue;
 };
+var changeDateFormat = function (date) {
+    return date.split("T")[0];
+};
 var generateUrlApi = function (paramsObj) {
     var searchParams = new URLSearchParams();
     var paramsOfApi = "";
@@ -209,6 +221,7 @@ var generateUrlApi = function (paramsObj) {
         var key = _a[_i];
         paramsOfApi = "" + paramsOfApi + (key === "title" ? "titleStartsWith" : key) + "=" + paramsObj[key] + "&";
     }
+    console.log(searchParams.toString());
     return searchParams.toString();
 };
 var queryParamsToApi = function () {
@@ -226,30 +239,40 @@ var queryParamsToApi = function () {
         }
     }
     else {
-        paramsOfApi = "orderBy=title";
+        paramsOfApi = "" + (params.get("type") == "characters" ? "orderBy=name" : "orderBy=title");
     }
     return paramsOfApi;
 };
-var fetchData = function () {
+var fetchData = function (id) {
     var queryParams = queryParamsToApi();
     var type = params.get("type") ? params.get("type") : "comics";
     var calcOffset = offset - limit === -limit ? 0 : offset - limit;
+    var infoId = id ? "/" + id : "";
     createLoader(true);
-    return fetch("" + baseUrl + type + "?ts=1&apikey=" + apiKey + "&hash=" + hash + "&offset=" + calcOffset + "&" + queryParams)
+    return fetch("" + baseUrl + type + infoId + "?ts=1&apikey=" + apiKey + "&hash=" + hash + "&offset=" + calcOffset + "&" + queryParams)
         .then(function (response) {
         return response.json();
     })
         .then(function (rta) {
         createLoader(false);
-        var comics = rta.data.results;
-        limit = rta.data.limit;
-        total = rta.data.total;
-        createTable(comics);
+        if (infoId) {
+            var data = rta.data.results[0];
+            createCardOfType(data, type);
+            contPagination.innerHTML = "";
+        }
+        else {
+            var comics = rta.data.results;
+            limit = rta.data.limit;
+            total = rta.data.total;
+            createTable(comics, type);
+        }
     });
 };
 var createLoader = function (toCreate) {
     if (toCreate) {
+        loadingData.innerHTML = "";
         var item = document.createElement("div");
+        item.classList.add("loader__container");
         item.innerHTML = "<div class=\"loader\"></div> <label>Cargando...</label>";
         loadingData.appendChild(item);
     }
@@ -260,12 +283,20 @@ var createLoader = function (toCreate) {
 var init = function () { return __awaiter(_this, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, fetchData()];
+            case 0:
+                if (!params.get("id")) return [3 /*break*/, 2];
+                return [4 /*yield*/, fetchData(params.get("id"))];
             case 1:
                 _a.sent();
-                disableBtns();
+                return [3 /*break*/, 4];
+            case 2: return [4 /*yield*/, fetchData("")];
+            case 3:
+                _a.sent();
+                _a.label = 4;
+            case 4:
                 createOptions(type.value);
                 consultParams();
+                disableBtns();
                 return [2 /*return*/];
         }
     });

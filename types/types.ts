@@ -12,19 +12,31 @@ type Characters = {
     urls?:[];
 }
 
+type ComicCharacters = {
+    available: number;
+    collectionURI: string;
+    items: CharactersOfComic[];
+    returned: number;
+}
+
+type CharactersOfComic = {
+    name: string;
+    resourceURI: string;
+}
+
 type Comics ={
-    characters: Characters;
+    characters: Characters & ComicCharacters; 
     collectedIssues?: [];
     collections?:[];
-    creators?:{};
-    dates?:[];
+    creators?: Creators;
+    dates?: DatesComics[];
     description?: string;
     diamondCode?: string;
     digitalID?: number;
     ean?: string;
     events?: {};
     format?: string;
-    id?: number;
+    id?: string;
     images?: [];
     isbn?: string;
     issn?: string;
@@ -36,13 +48,34 @@ type Comics ={
     series?: {};
     stories?: {};
     textObjects?: [];
-    thumbnail?: {};
+    thumbnail?: Thumbnail;
     title?: string;
     upc?: string;
     urls?: [{}];
     variantDescription?: string;
     variants?: []    
 }
+
+type Thumbnail = {
+    extension: string;
+    path: string
+}
+
+type DatesComics = {
+    type: string;
+    date: string
+}
+
+type Creators = {
+    items: CreatorsItems[];
+}
+
+type CreatorsItems = {
+    name: string;
+    resourceURI: string;
+    role: string;
+}
+
 type Events ={
 
 }
