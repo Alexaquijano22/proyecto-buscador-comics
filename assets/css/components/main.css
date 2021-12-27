@@ -196,6 +196,7 @@
     margin-top: 5px; }
   @media (max-width: 650px) {
     .searcher {
+      display: flex;
       flex-direction: column; } }
   @media (max-width: 350px) {
     .searcher__selects {

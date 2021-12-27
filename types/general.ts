@@ -43,24 +43,23 @@ const charactersOrderBy = [
 	"Z-A",
 ]
 
-const createOptions = (type) => {
+const createOptions = (type: string) => {
 	orderBy.innerHTML = ""
-	if (type === "comics") {
-		comicsOrderBy.forEach(element => {
+	if (type === "characters") {
+		charactersOrderBy.forEach((element: string) => {
+			const characterOption = document.createElement("option")
+			const optionText = document.createTextNode(element)
+			characterOption.setAttribute("value", element)
+			characterOption.appendChild(optionText)
+			orderBy.appendChild(characterOption)
+		})
+	} else {
+		comicsOrderBy.forEach((element: string) => {
 			const comicOption = document.createElement("option")
 			const optionText = document.createTextNode(element)
 			comicOption.setAttribute("value", element === "Más nuevo" ? "nuevo" : element === "Más viejo" ? "viejo" : element)
-			comicOption.appendChild(optionText);
+			comicOption.appendChild(optionText)
 			orderBy.appendChild(comicOption)
-
-		})
-	} else {
-		charactersOrderBy.forEach(element => {
-			const characterOption = document.createElement("option")
-			const optionText = document.createTextNode(element)
-			characterOption.appendChild(optionText)
-			orderBy.appendChild(characterOption)
-
 		})
 	}
 }
@@ -69,8 +68,8 @@ const consultParams = () => {
 	if (params.get("orderBy")) {
 		orderBy.value = params.get("orderBy")
 	}
-	if (params.get("title")) {
-		search.value = params.get("title")
+	if (params.get("title") || params.get("name")) {
+		search.value = params.get("title") || params.get("name")
 	}
 	if (params.get("type")) {
 		type.value = params.get("type")
@@ -107,7 +106,6 @@ const createTable = (comicsOrCharacter: Comics[] | Characters[], type: string) =
 		}
 		containerData.appendChild(items)
 		divImg.addEventListener('click', () => {
-			console.log(type);
 			window.location.href = "/index.html?" + `id=${item.id}&type=${type}` 
 		})
 	})
@@ -195,28 +193,46 @@ const changeDateFormat = (date: string) => {
 const generateUrlApi = (paramsObj) => {
 	const searchParams: URLSearchParams = new URLSearchParams()
 	let paramsOfApi = ""
-	if (paramsObj.titleStartsWith) {
-		searchParams.set("title", paramsObj.titleStartsWith)
+	if(paramsObj.type === "comics"){
+		if (paramsObj.titleStartsWith) {
+			searchParams.set("title", paramsObj.titleStartsWith)
+		}
+		searchParams.set("type", paramsObj.type)
+		searchParams.set("orderBy", paramsObj.orderBy)
+		for (const key of Object.keys(paramsObj)) {
+			paramsOfApi = `${paramsOfApi}${key === "title" ? "titleStartsWith" : key}=${paramsObj[key]}&`
+		}
+	}else{
+		if (paramsObj.titleStartsWith) {
+			searchParams.set("name", paramsObj.titleStartsWith)
+		}
+		searchParams.set("type", paramsObj.type)
+		searchParams.set("orderBy", paramsObj.orderBy)
+		for (const key of Object.keys(paramsObj)) {
+			paramsOfApi = `${paramsOfApi}${key === "title" ? "nameStartsWith" : key}=${paramsObj[key]}&`
+		}
 	}
-	searchParams.set("type", paramsObj.type)
-	searchParams.set("orderBy", paramsObj.orderBy)
-	for (const key of Object.keys(paramsObj)) {
-		paramsOfApi = `${paramsOfApi}${key === "title" ? "titleStartsWith" : key}=${paramsObj[key]}&`
-	}
-	console.log(searchParams.toString());
 	return searchParams.toString();
 }
 
 const queryParamsToApi = () => {
 	let paramsOfApi = ""
+	let param;
 	if (params.get("orderBy")) {
-		const param = {
-			titleStartsWith: params.get("title"),
-			orderBy: defaultOrder(params.get("type"), params.get("orderBy"))
+		if(params.get("name")){
+			param = {
+				nameStartsWith: params.get("name"),
+				orderBy: defaultOrder(params.get("type"), params.get("orderBy"))
+			}
+		}else{
+			param = {
+				titleStartsWith: params.get("title"),
+				orderBy: defaultOrder(params.get("type"), params.get("orderBy"))
+			}
 		}
 		for (const key of Object.keys(param)) {
 			if (param[key]) {
-				paramsOfApi = `${paramsOfApi}${key === "title" ? "titleStartsWith" : key}=${param[key]}&`
+				paramsOfApi = `${paramsOfApi}${key}=${param[key]}&`
 			}
 		}
 	} else {
@@ -269,7 +285,7 @@ const init = async () => {
 	}else{
 		await fetchData("")
 	}
-	createOptions(type.value)
+	createOptions(params.get("type"))
 	consultParams()
 	disableBtns()
 }

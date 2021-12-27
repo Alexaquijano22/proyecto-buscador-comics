@@ -9,7 +9,7 @@ const createCardOfType = (info: Comics & Characters, type: string) => {
 	results.innerHTML = "";
 }
 
-const fetchInfo = (info) => {
+const fetchInfo = (info: Comics & Characters) => {
 	const queryParams = queryParamsToApi()
 	const type = params.get("type") ? params.get("type") : "comics"
 	const calcOffset = offset - limit === -limit ? 0 : offset - limit
@@ -26,7 +26,7 @@ const fetchInfo = (info) => {
 		})
 }
 
-const createComicCard = async (info) => {
+const createComicCard = async (info: Comics & Characters) => {
 	const dataOfCharacters = await fetchInfo(info)
 	let listCreators = ""
 	const creators = info.creators.items.map((item) => {
@@ -71,7 +71,7 @@ const createComicCard = async (info) => {
 							<p class="card-characters__text">${character.name}</p>
 						</div>`
 					}).join('')
-				: ""}
+				: "<h3 style='margin-top:20px'>No se han encontrado resultados</h3>"}
 			</div>
 		</div>
 	</div>`
@@ -106,7 +106,7 @@ const createCharacterCard = async (info: Comics & Characters) => {
 							<p class="card__text">${comic.title}</p>
 						</div>`
 					}).join('')
-				: ""}
+				: "<h3 style='margin-top:20px'>No se han encontrado resultados</h3>"}
 			</div>
 		</div>
 	</div>`

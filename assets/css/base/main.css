@@ -38,7 +38,8 @@ h2 {
 .label-inputs {
   margin-left: 3px;
   color: white;
-  font-weight: 600; }
+  font-weight: 600;
+  width: max-content; }
 
 .flex {
   display: flex; }
