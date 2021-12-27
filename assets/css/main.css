@@ -38,7 +38,8 @@ h2 {
 .label-inputs {
   margin-left: 3px;
   color: white;
-  font-weight: 600; }
+  font-weight: 600;
+  width: max-content; }
 
 .flex {
   display: flex; }
@@ -307,6 +308,7 @@ h2 {
     margin-top: 5px; }
   @media (max-width: 650px) {
     .searcher {
+      display: flex;
       flex-direction: column; } }
   @media (max-width: 350px) {
     .searcher__selects {

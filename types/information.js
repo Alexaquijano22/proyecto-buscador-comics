@@ -82,7 +82,7 @@ var createComicCard = function (info) { return __awaiter(_this, void 0, void 0, 
                     dataOfCharacters.map(function (character) {
                         return "<div class=\"card-characters\"  onclick=\"window.location.href= '/index.html?id=" + character.id + "&type=characters'\">\n\t\t\t\t\t\t\t<div class=\"card-characters__contImg\">\n\t\t\t\t\t\t\t\t<img class=\"img-character\" src=\"" + character.thumbnail.path + "." + character.thumbnail.extension + "\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<p class=\"card-characters__text\">" + character.name + "</p>\n\t\t\t\t\t\t</div>";
                     }).join('')
-                    : "") + "\n\t\t\t</div>\n\t\t</div>\n\t</div>";
+                    : "<h3 style='margin-top:20px'>No se han encontrado resultados</h3>") + "\n\t\t\t</div>\n\t\t</div>\n\t</div>";
                 return [2 /*return*/];
         }
     });
@@ -98,7 +98,7 @@ var createCharacterCard = function (info) { return __awaiter(_this, void 0, void
                     dataOfComics.map(function (comic) {
                         return "<div id=\"cardComicOfCharacter\" class=\"card\" onclick=\"window.location.href= '/index.html?id=" + comic.id + "&type=comics'\">\n\t\t\t\t\t\t\t<div class=\"card__contImg\">\n\t\t\t\t\t\t\t\t<img class=\"img\" src=\"" + comic.thumbnail.path + "." + comic.thumbnail.extension + "\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<p class=\"card__text\">" + comic.title + "</p>\n\t\t\t\t\t\t</div>";
                     }).join('')
-                    : "") + "\n\t\t\t</div>\n\t\t</div>\n\t</div>";
+                    : "<h3 style='margin-top:20px'>No se han encontrado resultados</h3>") + "\n\t\t\t</div>\n\t\t</div>\n\t</div>";
                 return [2 /*return*/];
         }
     });

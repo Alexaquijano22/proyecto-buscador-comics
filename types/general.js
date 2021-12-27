@@ -72,7 +72,16 @@ var charactersOrderBy = [
 ];
 var createOptions = function (type) {
     orderBy.innerHTML = "";
-    if (type === "comics") {
+    if (type === "characters") {
+        charactersOrderBy.forEach(function (element) {
+            var characterOption = document.createElement("option");
+            var optionText = document.createTextNode(element);
+            characterOption.setAttribute("value", element);
+            characterOption.appendChild(optionText);
+            orderBy.appendChild(characterOption);
+        });
+    }
+    else {
         comicsOrderBy.forEach(function (element) {
             var comicOption = document.createElement("option");
             var optionText = document.createTextNode(element);
@@ -81,21 +90,13 @@ var createOptions = function (type) {
             orderBy.appendChild(comicOption);
         });
     }
-    else {
-        charactersOrderBy.forEach(function (element) {
-            var characterOption = document.createElement("option");
-            var optionText = document.createTextNode(element);
-            characterOption.appendChild(optionText);
-            orderBy.appendChild(characterOption);
-        });
-    }
 };
 var consultParams = function () {
     if (params.get("orderBy")) {
         orderBy.value = params.get("orderBy");
     }
-    if (params.get("title")) {
-        search.value = params.get("title");
+    if (params.get("title") || params.get("name")) {
+        search.value = params.get("title") || params.get("name");
     }
     if (params.get("type")) {
         type.value = params.get("type");
@@ -131,7 +132,6 @@ var createTable = function (comicsOrCharacter, type) {
         }
         containerData.appendChild(items);
         divImg.addEventListener('click', function () {
-            console.log(type);
             window.location.href = "/index.html?" + ("id=" + item.id + "&type=" + type);
         });
     });
@@ -212,29 +212,50 @@ var changeDateFormat = function (date) {
 var generateUrlApi = function (paramsObj) {
     var searchParams = new URLSearchParams();
     var paramsOfApi = "";
-    if (paramsObj.titleStartsWith) {
-        searchParams.set("title", paramsObj.titleStartsWith);
+    if (paramsObj.type === "comics") {
+        if (paramsObj.titleStartsWith) {
+            searchParams.set("title", paramsObj.titleStartsWith);
+        }
+        searchParams.set("type", paramsObj.type);
+        searchParams.set("orderBy", paramsObj.orderBy);
+        for (var _i = 0, _a = Object.keys(paramsObj); _i < _a.length; _i++) {
+            var key = _a[_i];
+            paramsOfApi = "" + paramsOfApi + (key === "title" ? "titleStartsWith" : key) + "=" + paramsObj[key] + "&";
+        }
     }
-    searchParams.set("type", paramsObj.type);
-    searchParams.set("orderBy", paramsObj.orderBy);
-    for (var _i = 0, _a = Object.keys(paramsObj); _i < _a.length; _i++) {
-        var key = _a[_i];
-        paramsOfApi = "" + paramsOfApi + (key === "title" ? "titleStartsWith" : key) + "=" + paramsObj[key] + "&";
+    else {
+        if (paramsObj.titleStartsWith) {
+            searchParams.set("name", paramsObj.titleStartsWith);
+        }
+        searchParams.set("type", paramsObj.type);
+        searchParams.set("orderBy", paramsObj.orderBy);
+        for (var _b = 0, _c = Object.keys(paramsObj); _b < _c.length; _b++) {
+            var key = _c[_b];
+            paramsOfApi = "" + paramsOfApi + (key === "title" ? "nameStartsWith" : key) + "=" + paramsObj[key] + "&";
+        }
     }
-    console.log(searchParams.toString());
     return searchParams.toString();
 };
 var queryParamsToApi = function () {
     var paramsOfApi = "";
+    var param;
     if (params.get("orderBy")) {
-        var param = {
-            titleStartsWith: params.get("title"),
-            orderBy: defaultOrder(params.get("type"), params.get("orderBy"))
-        };
+        if (params.get("name")) {
+            param = {
+                nameStartsWith: params.get("name"),
+                orderBy: defaultOrder(params.get("type"), params.get("orderBy"))
+            };
+        }
+        else {
+            param = {
+                titleStartsWith: params.get("title"),
+                orderBy: defaultOrder(params.get("type"), params.get("orderBy"))
+            };
+        }
         for (var _i = 0, _a = Object.keys(param); _i < _a.length; _i++) {
             var key = _a[_i];
             if (param[key]) {
-                paramsOfApi = "" + paramsOfApi + (key === "title" ? "titleStartsWith" : key) + "=" + param[key] + "&";
+                paramsOfApi = "" + paramsOfApi + key + "=" + param[key] + "&";
             }
         }
     }
@@ -294,7 +315,7 @@ var init = function () { return __awaiter(_this, void 0, void 0, function () {
                 _a.sent();
                 _a.label = 4;
             case 4:
-                createOptions(type.value);
+                createOptions(params.get("type"));
                 consultParams();
                 disableBtns();
                 return [2 /*return*/];
