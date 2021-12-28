@@ -69,7 +69,7 @@ const consultParams = () => {
 		orderBy.value = params.get("orderBy")
 	}
 	if (params.get("title") || params.get("name")) {
-		search.value = params.get("title") || params.get("name")
+		search.value = (params.get("title") || params.get("name")).toLowerCase()
 	}
 	if (params.get("type")) {
 		type.value = params.get("type")
@@ -195,7 +195,7 @@ const generateUrlApi = (paramsObj) => {
 	let paramsOfApi = ""
 	if(paramsObj.type === "comics"){
 		if (paramsObj.titleStartsWith) {
-			searchParams.set("title", paramsObj.titleStartsWith)
+			searchParams.set("title", paramsObj.titleStartsWith.toLowerCase())
 		}
 		searchParams.set("type", paramsObj.type)
 		searchParams.set("orderBy", paramsObj.orderBy)
@@ -204,7 +204,7 @@ const generateUrlApi = (paramsObj) => {
 		}
 	}else{
 		if (paramsObj.titleStartsWith) {
-			searchParams.set("name", paramsObj.titleStartsWith)
+			searchParams.set("name", paramsObj.titleStartsWith.toLowerCase())
 		}
 		searchParams.set("type", paramsObj.type)
 		searchParams.set("orderBy", paramsObj.orderBy)
