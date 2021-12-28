@@ -22,7 +22,7 @@
 - Se puede ir a la página anterior
 - Se deshabilitan los botones correspondientes cuando no puedan ser utilizados (por ejemplo, si se está en la última página, no se debe poder utilizar el botón de ir a la última página ni el de avanzar página)
 
-### 🖥️ Deployado [aquí]()
+### 🖥️ Deployado [aquí](https://alexaquijano22.github.io/proyecto-buscador-comics/)
 
 ### 🚀 Tecnologías utilizadas:
 - HTML5
