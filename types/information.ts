@@ -1,9 +1,9 @@
 const createCardOfType = (info: Comics & Characters, type: string) => {
 	containerData.innerHTML = ""
 	params.set("id", info.id)
-	if(type === "comics"){
+	if (type === "comics") {
 		createComicCard(info)
-	}else{
+	} else {
 		createCharacterCard(info)
 	}
 	results.innerHTML = "";
@@ -13,7 +13,7 @@ const fetchInfo = (info: Comics & Characters) => {
 	const queryParams = queryParamsToApi()
 	const type = params.get("type") ? params.get("type") : "comics"
 	const calcOffset = offset - limit === -limit ? 0 : offset - limit
-	const infoId = info.id ? `/${info.id}`: ""
+	const infoId = info.id ? `/${info.id}` : ""
 	createLoader(true);
 	return fetch(`${baseUrl}${type}${infoId}/${type == "characters" ? "comics" : "characters"}?ts=1&apikey=${apiKey}&hash=${hash}`)
 		.then((response) => {
@@ -22,7 +22,9 @@ const fetchInfo = (info: Comics & Characters) => {
 		.then((rta) => {
 			createLoader(false);
 			contPagination.innerHTML = ""
-			return  rta.data.results
+			return rta.data.results
+		}).catch(() => {
+			window.alert("Ha ocurrido un error con el servicio, intentalo mas tarde")
 		})
 }
 
@@ -63,15 +65,15 @@ const createComicCard = async (info: Comics & Characters) => {
 			<p class="margin-bottom: 0.5em;">${dataOfCharacters.length} ${dataOfCharacters.length == 0 || dataOfCharacters.length != 1 ? "Resultados" : "Resultado"}</p>
 			<div class="container-cards" style="justify-content:flex-start">
 				${dataOfCharacters.length > 0 ?
-					dataOfCharacters.map((character) => {
-						return `<div class="card-characters"  onclick="window.location.href= '/index.html?id=${character.id}&type=characters'">
+			dataOfCharacters.map((character) => {
+				return `<div class="card-characters"  onclick="window.location.href= '/index.html?id=${character.id}&type=characters'">
 							<div class="card-characters__contImg">
 								<img class="img-character" src="${character.thumbnail.path}.${character.thumbnail.extension}">
 							</div>
 							<p class="card-characters__text">${character.name}</p>
 						</div>`
-					}).join('')
-				: "<h3 style='margin-top:20px'>No se han encontrado resultados</h3>"}
+			}).join('')
+			: "<h3 style='margin-top:20px'>No se han encontrado resultados</h3>"}
 			</div>
 		</div>
 	</div>`
@@ -89,8 +91,9 @@ const createCharacterCard = async (info: Comics & Characters) => {
 			</div>
 			<div class="flex-column cardDescription__contInfo">
 				<h2 style="font-weight: 700; margin-bottom:10px;">${info.name}</h2>
-				<h3>Descripción: </h3>
-				<label class="cardDescription__text">${info.description}</label>
+				${info.description ? `<h3>Descripción: </h3>
+				<label class="cardDescription__text">${info.description}</label>` : ""}
+				
 			</div>
 			
 			</div>
@@ -98,15 +101,15 @@ const createCharacterCard = async (info: Comics & Characters) => {
 			<p>${dataOfComics.length} ${dataOfComics.length == 0 || dataOfComics.length != 1 ? "Resultados" : "Resultado"}</p>
 			<div class="container-cards" style="justify-content:flex-start; gap: 26px 0px;">
 				${dataOfComics.length > 0 ?
-					dataOfComics.map((comic) => {
-						return `<div id="cardComicOfCharacter" class="card" onclick="window.location.href= '/index.html?id=${comic.id}&type=comics'">
+			dataOfComics.map((comic) => {
+				return `<div id="cardComicOfCharacter" class="card" onclick="window.location.href= '/index.html?id=${comic.id}&type=comics'">
 							<div class="card__contImg">
 								<img class="img" src="${comic.thumbnail.path}.${comic.thumbnail.extension}">
 							</div>
 							<p class="card__text">${comic.title}</p>
 						</div>`
-					}).join('')
-				: "<h3 style='margin-top:20px'>No se han encontrado resultados</h3>"}
+			}).join('')
+			: "<h3 style='margin-top:20px'>No se han encontrado resultados</h3>"}
 			</div>
 		</div>
 	</div>`

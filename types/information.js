@@ -60,6 +60,8 @@ var fetchInfo = function (info) {
         createLoader(false);
         contPagination.innerHTML = "";
         return rta.data.results;
+    })["catch"](function () {
+        window.alert("Ha ocurrido un error con el servicio, intentalo mas tarde");
     });
 };
 var createComicCard = function (info) { return __awaiter(_this, void 0, void 0, function () {
@@ -94,7 +96,7 @@ var createCharacterCard = function (info) { return __awaiter(_this, void 0, void
             case 0: return [4 /*yield*/, fetchInfo(info)];
             case 1:
                 dataOfComics = _a.sent();
-                containerData.innerHTML = "\n\t<div class=\"flex-column cardDescription\">\n\t\t<div class=\"cardDescription__title\" style=\"margin-bottom:2em;\">\n\t\t\t<div class=\"flex\" style=\"justify-content:center;\">\n\t\t\t\t<img class=\"cardDescription__img\" src=\"" + info.thumbnail.path + "." + info.thumbnail.extension + "\"/>\n\t\t\t</div>\n\t\t\t<div class=\"flex-column cardDescription__contInfo\">\n\t\t\t\t<h2 style=\"font-weight: 700; margin-bottom:10px;\">" + info.name + "</h2>\n\t\t\t\t<h3>Descripci\u00F3n: </h3>\n\t\t\t\t<label class=\"cardDescription__text\">" + info.description + "</label>\n\t\t\t</div>\n\t\t\t\n\t\t\t</div>\n\t\t\t<h2 style=\"font-weight: 700;\">Comics: </h2>\n\t\t\t<p>" + dataOfComics.length + " " + (dataOfComics.length == 0 || dataOfComics.length != 1 ? "Resultados" : "Resultado") + "</p>\n\t\t\t<div class=\"container-cards\" style=\"justify-content:flex-start; gap: 26px 0px;\">\n\t\t\t\t" + (dataOfComics.length > 0 ?
+                containerData.innerHTML = "\n\t<div class=\"flex-column cardDescription\">\n\t\t<div class=\"cardDescription__title\" style=\"margin-bottom:2em;\">\n\t\t\t<div class=\"flex\" style=\"justify-content:center;\">\n\t\t\t\t<img class=\"cardDescription__img\" src=\"" + info.thumbnail.path + "." + info.thumbnail.extension + "\"/>\n\t\t\t</div>\n\t\t\t<div class=\"flex-column cardDescription__contInfo\">\n\t\t\t\t<h2 style=\"font-weight: 700; margin-bottom:10px;\">" + info.name + "</h2>\n\t\t\t\t" + (info.description ? "<h3>Descripci\u00F3n: </h3>\n\t\t\t\t<label class=\"cardDescription__text\">" + info.description + "</label>" : "") + "\n\t\t\t\t\n\t\t\t</div>\n\t\t\t\n\t\t\t</div>\n\t\t\t<h2 style=\"font-weight: 700;\">Comics: </h2>\n\t\t\t<p>" + dataOfComics.length + " " + (dataOfComics.length == 0 || dataOfComics.length != 1 ? "Resultados" : "Resultado") + "</p>\n\t\t\t<div class=\"container-cards\" style=\"justify-content:flex-start; gap: 26px 0px;\">\n\t\t\t\t" + (dataOfComics.length > 0 ?
                     dataOfComics.map(function (comic) {
                         return "<div id=\"cardComicOfCharacter\" class=\"card\" onclick=\"window.location.href= '/index.html?id=" + comic.id + "&type=comics'\">\n\t\t\t\t\t\t\t<div class=\"card__contImg\">\n\t\t\t\t\t\t\t\t<img class=\"img\" src=\"" + comic.thumbnail.path + "." + comic.thumbnail.extension + "\">\n\t\t\t\t\t\t\t</div>\n\t\t\t\t\t\t\t<p class=\"card__text\">" + comic.title + "</p>\n\t\t\t\t\t\t</div>";
                     }).join('')
