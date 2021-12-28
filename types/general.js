@@ -96,7 +96,7 @@ var consultParams = function () {
         orderBy.value = params.get("orderBy");
     }
     if (params.get("title") || params.get("name")) {
-        search.value = params.get("title") || params.get("name");
+        search.value = (params.get("title") || params.get("name")).toLowerCase();
     }
     if (params.get("type")) {
         type.value = params.get("type");
@@ -214,7 +214,7 @@ var generateUrlApi = function (paramsObj) {
     var paramsOfApi = "";
     if (paramsObj.type === "comics") {
         if (paramsObj.titleStartsWith) {
-            searchParams.set("title", paramsObj.titleStartsWith);
+            searchParams.set("title", paramsObj.titleStartsWith.toLowerCase());
         }
         searchParams.set("type", paramsObj.type);
         searchParams.set("orderBy", paramsObj.orderBy);
@@ -225,7 +225,7 @@ var generateUrlApi = function (paramsObj) {
     }
     else {
         if (paramsObj.titleStartsWith) {
-            searchParams.set("name", paramsObj.titleStartsWith);
+            searchParams.set("name", paramsObj.titleStartsWith.toLowerCase());
         }
         searchParams.set("type", paramsObj.type);
         searchParams.set("orderBy", paramsObj.orderBy);
@@ -287,6 +287,8 @@ var fetchData = function (id) {
             total = rta.data.total;
             createTable(comics, type);
         }
+    })["catch"](function () {
+        window.alert("Ha ocurrido un error con el servicio, intentalo mas tarde");
     });
 };
 var createLoader = function (toCreate) {
