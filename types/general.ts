@@ -160,7 +160,7 @@ const filter = () => {
 	window.location.href = "/index.html?" + urlApi;
 }
 
-const defaultOrder = (queryType, queryOrder) => {
+const defaultOrder = (queryType: string, queryOrder: string) => {
 	let orderValue;
 	switch (queryType) {
 		case "comics":
@@ -264,6 +264,8 @@ const fetchData = (id: string) => {
 				total = rta.data.total
 				createTable(comics, type)
 			}
+		}).catch(() => {
+			window.alert("Ha ocurrido un error con el servicio, intentalo mas tarde")
 		})
 }
 
